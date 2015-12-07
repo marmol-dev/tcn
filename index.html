@@ -7,8 +7,20 @@
   <body>
     <h1>Interfaz para llamar a las pruebas</h1>
     <form id="" name="llamar_test" action="test.html" method="get">
-      <input required placeholder="Url del JSON de los datos de las pruebas" type="text" name="dataUrl" value="">
+      <strong>Url JSON pruebas:</strong>
+      <input id="dataUrl" required placeholder="Url del JSON de los datos de las pruebas" type="text" name="dataUrl" value="">
+      <a href="#" onclick="usarJSONPruebas('ejemplos/pruebas.json')">Usar ejemplo</a>
+      <br>
+      <strong>Url de envío de resultados (opcional):</strong>
+      <input placeholder="Url de envío de pruebas (opcional)" type="text" name="dataUrl" value="">
+      Si se introduce una URL en este campo se enviarán los resultados de las pruebas a esa url via POST, en formato JSON.
+      <br>
       <button type="submit">Enviar</button>
     </form>
+    <script type="text/javascript">
+      function usarJSONPruebas(url){
+        document.getElementById("dataUrl").value = url;
+      }
+    </script>
   </body>
 </html>

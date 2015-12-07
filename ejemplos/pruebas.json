@@ -1,0 +1,23 @@
+{
+  "./ejemplos/ejemplo1.html": {
+    "crear_usuario": {
+      "nombre": {
+        "": false,
+        "Ana Garriga": true,
+        "a": false,
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": false
+      },
+      "apellidos": {
+        "": false,
+        "Alvarez Asuriaga": true,
+        "aaaa": false,
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": false
+      },
+      "email": {
+        "": false,
+        "tm@gmail.com": true,
+        "asssss": false
+      }
+    }
+  }
+}

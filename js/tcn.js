@@ -1,4 +1,8 @@
-((function(exports){
+((function(exports, $){
+
+  if (!$){
+    throw new Error('No se ha encontrado jQuery');
+  }
 
   function esCampoValido($campo){
     var campo = $campo.get(0);
@@ -44,7 +48,8 @@
 
 
   function testearFormulario(formulario, pruebas){
-    //Comprobaciones
+
+    //TODO: Mejorar
     if (!$(formulario).length){
       throw new Error('No existe el formulario');
     }
@@ -55,7 +60,7 @@
 
     //Definición de variables
     var resultado = {},
-      resultadoEsperado, resultadoobtenido, resultadoCorrecto, valorEntrada, $campo;
+      resultadoEsperado, resultadoObtenido, resultadoCorrecto, valorEntrada, $campo;
 
     //Algoritmo
     for(var nombreCampo in pruebas){
@@ -66,32 +71,31 @@
         throw new Error('Campo "' + nombreCampo + '" no encontrado en el formulario "' + formulario.name + '".');
       }
 
-      resultado[nombreCampo] = [];
+      resultado[nombreCampo] = {};
 
       for (valorEntrada in pruebas[nombreCampo]){
         resultadoEsperado = pruebas[nombreCampo][valorEntrada];
         resultadoObtenido = introducirYComprobar($campo, valorEntrada);
         resultadoCorrecto = resultadoEsperado === resultadoObtenido;
-        resultado[nombreCampo].push({
-          entrada: valorEntrada,
+        resultado[nombreCampo][valorEntrada] = {
           esperado: resultadoEsperado,
           obtenido: resultadoObtenido,
           correcto: resultadoCorrecto
-        });
+        };
       }
     }
 
     return resultado;
   }
 
-  function testearPagina(datos, callback){
+  function testearPagina(url, formulariosPruebas, callback){
     //Comprobaciones
-    if (datos instanceof Object === false){
-      throw new Error('Datos de la página inválidos');
+    if (typeof url !== 'string'){
+      throw new Error('URL de la página inválida');
     }
 
-    if (typeof datos.url !== 'string'){
-      throw new Error('URL de la página inválida');
+    if (formulariosPruebas instanceof Object === false){
+      throw new Error('Datos de la página inválidos');
     }
 
     if (typeof callback !== 'function'){
@@ -99,14 +103,9 @@
     }
 
     //Definiciones
-    var url = datos.url,
-      formulariosPruebas = datos.formularios,
-      $iframe = $('<iframe/>', {src : url}).hide(),
+    var  $iframe = $('<iframe/>', {src : url}).hide(),
       $formulario,
-      resultado = {
-        url: url,
-        formularios : {}
-      };
+      resultado = {};
 
     function enviarCallback(){
       $iframe.remove();
@@ -125,7 +124,7 @@
           return;
         } else {
           try {
-            resultado.formularios[nombreFormulario] = testearFormulario($formulario.get(0), formulariosPruebas[nombreFormulario]);
+            resultado[nombreFormulario] = testearFormulario($formulario.get(0), formulariosPruebas[nombreFormulario]);
           } catch (e){
             enviarCallback(e, null);
             return;
@@ -142,7 +141,7 @@
 
   function testearPaginas(datos, paralelos, notificarPaginaTesteada, callback){
     //Comprobaciones
-    if (!Array.isArray(datos)){
+    if (datos instanceof Object === false){
       throw new Error('Datos de las páginas inválidos');
     }
 
@@ -159,20 +158,21 @@
     }
 
     //Definición
-    var resultado = [];
+    var resultado = {},
+      paginas = Object.keys(datos);
 
     //Algoritmo
     function recursivo(i){
-      if (i >= datos.length) {
+      if (i >= paginas.length) {
         callback(null, resultado);
         return;
       }
 
-      testearPagina(datos[i], function(error, respuesta){
+      testearPagina(paginas[i], datos[paginas[i]], function(error, respuesta){
         if (error) callback(error);
         else {
-          resultado[i] = respuesta;
-          notificarPaginaTesteada(respuesta);
+          resultado[paginas[i]] = respuesta;
+          notificarPaginaTesteada(paginas[i], respuesta);
           recursivo(i+1);
         }
       });
@@ -184,13 +184,13 @@
   }
 
 
-  var FrameworkTests = function(){};
+  var TCN = function(){};
 
-  FrameworkTests.testearPaginas = testearPaginas;
-  FrameworkTests.testearPagina = testearPagina;
-  FrameworkTests.testearFormulario = testearFormulario;
-  FrameworkTests.esCampoValido = esCampoValido;
+  TCN.testearPaginas = testearPaginas;
+  TCN.testearPagina = testearPagina;
+  TCN.testearFormulario = testearFormulario;
+  TCN.esCampoValido = esCampoValido;
 
-  exports.FrameworkTests = FrameworkTests;
+  exports.TCN = TCN;
 
-})(window));
+})(window, window.$));

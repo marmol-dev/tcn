@@ -1,0 +1,128 @@
+# TCN para Javascript
+Tests Caja Negra para Javascript
+
+## Uso
+La librería se puede utilizar tanto en cada una de las páginas que se quieren testear o crear una página separada para automatizar las pruebas.
+
+Si el caso de uso es el segundo (página separada que comprueba la validez de otras) solo se necesitan definir las pruebas en formato JSON (ver punto 2) y llamar al archivo donde está el json desde la página *index.html*.
+
+### 1 Incluir jQuery y tcn.js
+```html
+<body>
+  ...
+  <script src="js/jquery.min.js" languaje="text/javascript"></script>
+  <script src="js/tcn.js" languaje="text/javascript"></script>
+</body>  
+```
+
+### 2 Crear el objeto de las pruebas:
+La definición de las pruebas debe estar guardada en un objeto javascript (o bien en un archivo .json que se cargue con Ajax).
+
+#### Para un formulario:
+```javascript
+{
+  "<nombre_campo_1>" : {
+    "<valor_1>" : <valor_esperado_1>
+    "<valor_2>" : <valor_esperado_2>
+  },
+  "<nombre_campo_n>" : {
+    ...
+  },
+}
+```
+
+El valor esperado es el un booleano que es true si se espera que la validación sea correcta y false en caso contrario.
+
+Ejemplo:
+```javascript
+{
+  "nombre" : {
+    "" : false,
+    "Ana Garriga": true,
+    "a" : false,
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" : false
+  },
+  "apellidos": {
+    "" : false,
+    "Alvarez Asuriaga": true,
+    "aaaa" : false,
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" : false
+  },
+  "email" : {
+    "" : false,
+    "tm@gmail.com" : true,
+    "asssss" : false
+  }
+}
+```
+#### Para una página
+```javascript
+{
+  "<nombre_formulario_1>" : <objeto_formulario_1>, //Objeto del punto anterior
+  "<nombre_formulario_n>": <objeto_formulario_n>
+}
+```
+
+#### Para varias páginas
+```javascript
+{
+  "<url_pagina_1>" : <objeto_pagina_1>, //Objeto del punto anterior
+  "<url_pagina_n>" : <objeto_pagina_n>
+}
+```
+
+### 3 Llamar a la librería TCN
+#### Para un formulario
+```javascript
+var res = TCN.testearFormulario(formulario, pruebas);
+```
+`res` es el objeto resultado y tiene la siguiente estructura:
+```javascript
+{
+  "<nombre_campo_1>" : {
+    "entrada" : "<texto_entrada>",
+    "esperado" : "<valor_booleano_esperado>",
+    "obtenido" : "<valor_booleano_obtenido>",
+    "correcto": "<valor_booleano_correctitud>"
+  },
+  ...
+}
+```
+
+`pruebas` es el objeto de datos definido en el punto 2 para un formulario.
+
+#### Para una página
+```javascript
+TCN.testearPagina(url, pruebas, callback);
+```
+`url` es la url de la página a probar.
+`pruebas` es el objeto de pruebas visto en el punto 2 para una página.
+`callback` es la función que se invoca al finalizar el test o al producirse un error. Se llama a la función con los siguientes parámetros:
+`error` un objeto *Error* si se produce un error o *null* en caso contrario.
+`res` es el objeto resultado y tiene la siguiente estructura si no se han producido errores (*null* en caso contrario):
+```javascript
+{
+  "<nombre_formulario_1>": <resultado_formulario>, //formato del resultado del punto anterior
+  ...
+}
+```
+#### Para varias páginas
+```javascript
+TCN.testearPaginas(datos, paralelismo, notificarPaginaTesteada, callback);
+```
+
+`datos` (requerido) es un objeto de pruebas visto en el punto 2 para varias páginas.
+`paralelismo` (opcional, por defecto 1) es el número de páginas que se analizan simultáneamente.
+`notificarPaginaTesteada` (opcional) es una función que se invoca cada vez que se analiza una página y recibe como parámetros: `nombrePagina`, `resultadoPagina`.
+`callback` (requerido) es una función que se invoca al finalizar el análisis de todas las páginas. Recibe como parámetros: `error`, `resultadoPaginas`.
+`error` un objeto *Error* si se produce un error o *null* en caso contrario.
+`resultadoPaginas` un objeto resultado y tiene la siguiente estructura si no se han producido errores (*null* en caso contrario):
+```javascript
+{
+  "<url_pagina>": <resultado_pagina>, //formato del resultado de una página
+  ...
+}
+```
+
+#### Ejemplos
+Ver página *text.html* y *js/test.js* que hace uso de la librería *tcn.js*.

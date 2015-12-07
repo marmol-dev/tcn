@@ -16,6 +16,22 @@
     <div class="">
       <h2>Resultados totales:</h2>
       <textarea id="resultados-totales"></textarea>
+      <div id="estadisticas">
+        <h3>Estadísticas:</h3>
+        <ul>
+          <li><string>Total tests incorrectos:</string><span id="total-tests-incorrectos"></span></li>
+          <li><string>Total tests:</string><span id="total-tests"></span></li>
+          <li><string>Total campos erróneos:</string><span id="total-campos-erroneos"></span></li>
+          <li><string>Total campos:</string><span id="total-campos"></span></li>
+          <li><string>Total formularios erróneos:</string><span id="total-formularios-erroneos"></span></li>
+          <li><string>Total formularios:</string><span id="total-formularios"></span></li>
+          <li><string>Total páginas erróneas:</string><span id="total-paginas-erroneas"></span></li>
+          <li><string>Total páginas:</string><span id="total-paginas"></span></li>
+        </ul>
+      </div>
+      <div id="div-tabla-resultados">
+        <h3>Tabla resultados:</h3>
+      </div>
     </div>
 
     <div class="">
@@ -23,9 +39,8 @@
       <pre id="errores"></pre>
     </div>
 
-
-    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script type="text/javascript" src="js/tests_framework.js"></script>
+    <script text="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/tcn.js"></script>
     <script type="text/javascript" src="js/test.js"></script>
   </body>
 </html>
