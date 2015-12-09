@@ -4,7 +4,7 @@ Tests Caja Negra para Javascript
 ## Uso
 La librería se puede utilizar tanto en cada una de las páginas que se quieren testear o crear una página separada para automatizar las pruebas.
 
-Si el caso de uso es el segundo (página separada que comprueba la validez de otras) solo se necesitan definir las pruebas en formato JSON (ver punto 2) y llamar al archivo donde está el json desde la página *index.html*.
+Si el caso de uso es el segundo (página separada que comprueba la validez de otras) solo se necesita definir las pruebas en formato JSON (ver punto 2) y llamar al archivo donde está el json desde la página *index.html*.
 
 ### 1 Incluir jQuery y tcn.js
 ```html
@@ -125,7 +125,28 @@ TCN.testearPaginas(datos, paralelismo, notificarPaginaTesteada, callback);
 ```
 
 #### Ejemplos
-Ver página *text.html* y *js/test.js* que hace uso de la librería *tcn.js*.
+Ver página *index.html*, *test.html* y *js/test.js* que hace uso de la librería *tcn.js*.
+
+## Aspectos a tener en cuenta
+Los tests se deberán realizar en un **navegador** que sea **compatible** con validación HTML5.
+
+La validez de ĺos campos se obtendrá a partir de los resultados proporcionados por las funciones de **validación de HTML5** (tipo de campo, longitudes, *patterns*, ...).
+
+Se podrán definir **funciones de validación personalizadas** para  cada campo utilizando la API que proporciona el estándar (método *.setCustomValidity()*). Un ejemplo de validación personalizada es el del *dni* de *ejemplos/ejemplo1.html*:
+```javascript
+document.getElementById('campo_dni').addEventListener('input', function validarCampoDNI() {
+  var todoCorrecto = true;
+  todoCorrecto = funcionPersonalizadaQueCompruebaElNif(this.value);
+  //más comprobaciones ...
+  if (todoCorrecto) {
+    //otro caso a comprobar
+    //todoCorrecto = miFuncion(this.value);
+  }
+  this.setCustomValidity(todoCorrecto ? '' : 'DNI incorrecto');
+});
+```
+
+Más información sobre las validaciones HTML5: [http://www.sitepoint.com/html5-forms-javascript-constraint-validation-api/](http://www.sitepoint.com/html5-forms-javascript-constraint-validation-api/)
 
 ## Licencia
 Copyright 2015 Martín Molina Álvarez

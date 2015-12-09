@@ -1,14 +1,56 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Crear usuario</title>
-  </head>
-  <body>
-    <form name="crear_usuario" action="#" method="post">
-      <input type="text" name="nombre" required pattern="[a-z A-Z]{2,25}" value="">
-      <input type="text" name="apellidos" required pattern="[a-z A-Z]{5,50}" value="">
-      <input type="email" name="email" value="" required>
-    </form>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <title>Crear usuario</title>
+</head>
+
+<body>
+  <form name="crear_usuario" action="#" method="post">
+    <input type="text" id="campo_dni" name="dni" value="">
+    <input type="text" name="nombre" required pattern="[a-z A-Z]{2,25}" value="">
+    <input type="text" name="apellidos" required pattern="[a-z A-Z]{5,50}" value="">
+    <input type="email" name="email" value="" required>
+  </form>
+  <script type="text/javascript">
+    ((function(exportar) {
+
+      //Herramientas
+      function esNif(dni) {
+        var numero, letr, letra, expresion_regular_dni = /^\d{8}[a-zA-Z]$/;
+
+        if (expresion_regular_dni.test(dni) == true) {
+          numero = dni.substr(0, dni.length - 1);
+          letr = dni.substr(dni.length - 1, 1);
+          numero = numero % 23;
+          letra = 'TRWAGMYFPDXBNJZSQVHLCKET';
+          letra = letra.substring(numero, numero + 1);
+          return letra === letr.toUpperCase();
+        } else {
+          return false;
+        }
+      }
+
+      //Init
+      function documentoListo() {
+        //Validamos el dni
+        document.getElementById('campo_dni').addEventListener('input', function validarCampoDNI() {
+          var todoCorrecto = true;
+          todoCorrecto = esNif(this.value);
+          //más opciones
+          if (todoCorrecto) {
+            //otro caso a comprobar
+            //todoCorrecto = miFuncion(this.value);
+          }
+          this.setCustomValidity(todoCorrecto ? '' : 'DNI incorrecto');
+        });
+      }
+
+      //Le decimos al documento que cuando esté listo invoque nuestra función de inicio
+      document.addEventListener('DOMContentLoaded', documentoListo);
+    })(window));
+  </script>
+</body>
+
 </html>

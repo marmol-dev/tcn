@@ -1,6 +1,13 @@
 {
   "./ejemplos/ejemplo1.html": {
     "crear_usuario": {
+      "dni": {
+        "59768388J" : true,
+        "66112233A": false,
+        "": false,
+        "1234A": false,
+        "1111111111111B": false
+      },
       "nombre": {
         "": false,
         "Ana Garriga": true,
