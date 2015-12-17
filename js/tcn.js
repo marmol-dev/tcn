@@ -4,6 +4,22 @@
     throw new Error('No se ha encontrado jQuery');
   }
 
+  function esArrayDe(array, tipo){
+    if (typeof tipo !== 'string'){
+      throw new Error('Tipo inválido');
+    }
+
+    if (!Array.isArray(array)){
+      return false;
+    } else {
+      var i = array.length - 1;
+      while (i >= 0 && typeof array[i] === tipo){
+        i--;
+      }
+      return i === -1;
+    }
+  }
+
   function fireEvent(node, eventName) {
     // Make sure we use the ownerDocument from the provided node to avoid cross-window problems
     var doc;
@@ -107,46 +123,95 @@
      }
    */
 
+  function andLogico(array){
+    var i = array.length - 1;
+    while (i >= 0 && array[i] === true){
+      i--;
+    }
+    return i === -1;
+  }
 
-  function testearFormulario(formulario, pruebas){
+  function testearFormulario(formulario, definicionPruebas){
+    //Definición variables
+    var resultadoPruebas = {},
+      nombreConjuntoCampos,
+      nombresConjuntoCampos,
+      valorConjuntoCampos,
+      valoresConjuntoCampos,
+      i,
+      resultadoEsperadoValorCampo,
+      resultadoObtenidoValorCampo,
+      resultadoCorrectoValorCampo,
+      resultadosEsperadosValorConjuntoCampos,
+      $campo;
 
-    //TODO: Mejorar
-    if (!$(formulario).length){
-      throw new Error('No existe el formulario');
+
+    //Realizamos las comprobaciones de los parámetros de entrada
+    //Validación del formulario
+    if (formulario instanceof HTMLElement === false){
+      //throw new Error('Formulario inválido');
     }
 
-    if (pruebas instanceof Object === false){
-      throw new Error('Pruebas inválidas');
+    //Validación de las pruebas
+    var errorDefinicionPruebasInvalida = 'Definición de pruebas de formulario "' + formulario.name + '" inválida.';
+    if (definicionPruebas instanceof Object === false){
+      throw new Error(errorDefinicionPruebasInvalida);
     }
 
-    //Definición de variables
-    var resultado = {},
-      resultadoEsperado, resultadoObtenido, resultadoCorrecto, valorEntrada, $campo;
+    for (nombreConjuntoCampos in definicionPruebas){
+      if (definicionPruebas[nombreConjuntoCampos] instanceof Object === false){
+        throw new Error(errorDefinicionPruebasInvalida);
+      }
+    }
 
     //Algoritmo
-    for(var nombreCampo in pruebas){
-
-      //TODO: mejorar para excluir 'submit'
-      $campo = $(formulario).find('input[name="' + nombreCampo + '"]');
-      if ($campo.length === 0){
-        throw new Error('Campo "' + nombreCampo + '" no encontrado en el formulario "' + formulario.name + '".');
+    for (nombreConjuntoCampos in definicionPruebas){
+      nombresConjuntoCampos = nombreConjuntoCampos.split('&&');
+      //Comprobamos que existen todos los campos del conjunto de campos
+      for (i = nombresConjuntoCampos.length - 1; i >= 0; i--){
+        if ($(formulario).find('[name="' + nombresConjuntoCampos[i] + '"]').length === 0){
+          throw new Error('No existe el campo con nombre "'+ nombresConjuntoCampos[i] +'" en el formulario "' + formulario.name + '".');
+        }
       }
+      resultadoPruebas[nombreConjuntoCampos] = {};
+      for (valorConjuntoCampos in definicionPruebas[nombreConjuntoCampos]){
+        valoresConjuntoCampos = valorConjuntoCampos.split('&&');
+        //Comprueba que el número de conjunto de campos sea el mismo que el número de valores
+        if (nombresConjuntoCampos.length !== valoresConjuntoCampos.length){
+          if (nombreConjuntoCampos.length === 1){
+            valoresConjuntoCampos = [valorConjuntoCampos];
+          } else {
+            throw new Error('El conjunto de campos "' + nombreConjuntoCampos + '" no tiene el mismo número de valores ("' + valorConjuntoCampos + '")');
+          }
+        }
 
-      resultado[nombreCampo] = {};
+        //Comprueba que el resultado esperado sea boolean
+        resultadoEsperadoValorConjuntoCampos = definicionPruebas[nombreConjuntoCampos][valorConjuntoCampos];
+        if (typeof resultadoEsperadoValorConjuntoCampos !== 'boolean'){
+          throw new Error('El resultado esperado del valor(es) "' + valorConjuntoCampos + '" del campo(s) "' + nombreConjuntoCampos + '" no es válido.');
+        }
 
-      for (valorEntrada in pruebas[nombreCampo]){
-        resultadoEsperado = pruebas[nombreCampo][valorEntrada];
-        resultadoObtenido = introducirYComprobar($campo, valorEntrada);
-        resultadoCorrecto = resultadoEsperado === resultadoObtenido;
-        resultado[nombreCampo][valorEntrada] = {
-          esperado: resultadoEsperado,
-          obtenido: resultadoObtenido,
-          correcto: resultadoCorrecto
+        //Guarda los resultados obtenidos
+        resultadosObtenidosValoresConjuntoCampos = [];
+        for (i = nombresConjuntoCampos.length - 1; i >= 0; i--){
+          $campo = $(formulario).find('[name="' + nombresConjuntoCampos[i] + '"]');
+          resultadosObtenidosValoresConjuntoCampos[i] = introducirYComprobar($campo, valoresConjuntoCampos[i]);
+          console.log('resultadosObtenidosValoresConjuntoCampos[i]', nombreConjuntoCampos, valorConjuntoCampos, valoresConjuntoCampos[i], resultadosObtenidosValoresConjuntoCampos[i]);
+        }
+        //Calcula el resultado obtenido para el conjunto de campos
+        resultadoObtenidoValorConjuntoCampos = andLogico(resultadosObtenidosValoresConjuntoCampos);
+
+        //Añade los resultados al objeto de resultados
+        resultadoPruebas[nombreConjuntoCampos][valorConjuntoCampos] = {
+          esperado: resultadoEsperadoValorConjuntoCampos,
+          obtenido: resultadoObtenidoValorConjuntoCampos,
+          correcto: resultadoObtenidoValorConjuntoCampos === resultadoEsperadoValorConjuntoCampos
         };
+
       }
     }
 
-    return resultado;
+    return resultadoPruebas;
   }
 
   function testearPagina(url, formulariosPruebas, callback){

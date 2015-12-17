@@ -52,9 +52,26 @@ Ejemplo:
     "" : false,
     "tm@gmail.com" : true,
     "asssss" : false
+  },
+  "contrasena1&&contrasena2" : {
+    "valor1&&valor2" : false,
+    "mismo_valor&&mismo_valor" : true
   }
 }
 ```
+El campo (conjunto de campos reales) "contrasena1&&contrasena2" indica al framework que se quiere realizar una validación de varios campos (dos en este caso) introduciendo los valores:
+
+- "valor1" en "contrasena1" y "valor2" en "contrasena2".
+- "mismo_valor" en "contrasena1" y "mismo_valor" en "contrasena2".
+
+El resultado ESPERADO (true o false) es el resultado que se espera al realizar un AND lógico en cada uno de los campos después de introducir los valores indicados. Para el primer test del caso del párrafo anterior:
+
+1. Se introduce "valor1" en "contrasena1".
+2. Se comprueba si es válido el campo "contrasena1".
+3. Se introduce "valor2" en "contrasena2".
+4. Se comprueba si es válido el campo "contrasena2".
+5. Se comprueba el resultado obtenido de "contrasena1&&contrasena2" haciendo el AND con los resultados obtenidos del paso 2 y 4.
+
 #### Para una página
 ```javascript
 {
