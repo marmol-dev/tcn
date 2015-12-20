@@ -3,43 +3,69 @@
   <head>
     <meta charset="utf-8">
     <title>Análisis de la página</title>
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap-theme.min.css" media="screen" title="no title" charset="utf-8">
   </head>
   <body>
 
-    <h1>Tests</h1>
+    <div class="container">
+      <header>
+        <h1>Tests</h1>
+        <hr>
+      </header>
 
-    <div class="">
-      <h2>Resultados parciales:</h2>
-      <ul id="resultados-parciales"></ul>
-    </div>
-
-    <div class="">
-      <h2>Resultados totales:</h2>
-      <textarea id="resultados-totales"></textarea>
-      <div id="estadisticas">
-        <h3>Estadísticas:</h3>
-        <ul>
-          <li><string>Total tests incorrectos:</string><span id="total-tests-incorrectos"></span></li>
-          <li><string>Total tests:</string><span id="total-tests"></span></li>
-          <li><string>Total campos erróneos:</string><span id="total-campos-erroneos"></span></li>
-          <li><string>Total campos:</string><span id="total-campos"></span></li>
-          <li><string>Total formularios erróneos:</string><span id="total-formularios-erroneos"></span></li>
-          <li><string>Total formularios:</string><span id="total-formularios"></span></li>
-          <li><string>Total páginas erróneas:</string><span id="total-paginas-erroneas"></span></li>
-          <li><string>Total páginas:</string><span id="total-paginas"></span></li>
-        </ul>
+      <div class="row">
+        <div class="col-lg-12" id="estadisticas">
+          <h2>Estadísticas:</h2>
+          <ul>
+            <li><string>Total tests incorrectos:</string><span id="total-tests-incorrectos"></span></li>
+            <li><string>Total tests:</string><span id="total-tests"></span></li>
+            <li><string>Total campos erróneos:</string><span id="total-campos-erroneos"></span></li>
+            <li><string>Total campos:</string><span id="total-campos"></span></li>
+            <li><string>Total formularios erróneos:</string><span id="total-formularios-erroneos"></span></li>
+            <li><string>Total formularios:</string><span id="total-formularios"></span></li>
+            <li><string>Total páginas erróneas:</string><span id="total-paginas-erroneas"></span></li>
+            <li><string>Total páginas:</string><span id="total-paginas"></span></li>
+          </ul>
+        </div>
       </div>
-      <div id="div-tabla-resultados">
-        <h3>Tabla resultados:</h3>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <h2>Resultados totales:</h2>
+          <div class="row">
+            <div class="col-lg-12">
+              <pre class="" id="resultados-totales"></pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12" id="div-tabla-resultados">
+              <h3>Tabla resultados:</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <h2>Errores:</h2>
+          <pre id="errores"></pre>
+        </div>
       </div>
     </div>
 
+
+
+
+
     <div class="">
-      <h2>Errores:</h2>
-      <pre id="errores"></pre>
     </div>
 
-    <script text="text/javascript" src="js/jquery.min.js"></script>
+    <div class="">
+
+    </div>
+
+    <script text="text/javascript" src="vendor/jquery.min.js"></script>
     <script type="text/javascript" src="js/tcn.js"></script>
     <script type="text/javascript" src="js/test.js"></script>
   </body>

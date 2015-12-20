@@ -193,10 +193,9 @@
 
         //Guarda los resultados obtenidos
         resultadosObtenidosValoresConjuntoCampos = [];
-        for (i = nombresConjuntoCampos.length - 1; i >= 0; i--){
+        for (i = 0; i < nombresConjuntoCampos.length; i++){
           $campo = $(formulario).find('[name="' + nombresConjuntoCampos[i] + '"]');
           resultadosObtenidosValoresConjuntoCampos[i] = introducirYComprobar($campo, valoresConjuntoCampos[i]);
-          console.log('resultadosObtenidosValoresConjuntoCampos[i]', nombreConjuntoCampos, valorConjuntoCampos, valoresConjuntoCampos[i], resultadosObtenidosValoresConjuntoCampos[i]);
         }
         //Calcula el resultado obtenido para el conjunto de campos
         resultadoObtenidoValorConjuntoCampos = andLogico(resultadosObtenidosValoresConjuntoCampos);

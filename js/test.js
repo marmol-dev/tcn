@@ -118,7 +118,7 @@
         $('#total-paginas').text(es.totalPaginas);
 
         //Renderizar tabla resultadosPagina
-        var $tabla = $("<table>");
+        var $tabla = $("<table>").addClass('table table-striped');
         $tabla.append(
           $('<tr>').append(
             $('<th>').text('URL página')
@@ -151,7 +151,9 @@
                   ).append(
                     $('<td>').text(nombreCampo)
                   ).append(
-                    $('<td>').text(valorTest)
+                    $('<td>').append(
+                      $('<textarea>').text(valorTest)
+                    )
                   ).append(
                     $('<td>').text(resultadoTest.esperado)
                   ).append(
