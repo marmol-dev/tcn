@@ -137,12 +137,18 @@
           )
         );
 
-        var resultadoTest;
+        var resultadoTest, textoValorTest;
         for(var urlPagina in datos){
           for(var nombreFormulario in datos[urlPagina]){
             for(var nombreCampo in datos[urlPagina][nombreFormulario]){
               for(var valorTest in datos[urlPagina][nombreFormulario][nombreCampo]){
                 resultadoTest = datos[urlPagina][nombreFormulario][nombreCampo][valorTest];
+                if (valorTest.length <= 30){
+                  textoValorTest = valorTest;
+                } else {
+                  textoValorTest = valorTest.substr(0, 15) + '...' + valorTest.substr(valorTest.length - 15, 15);
+                }
+
                 $tabla.append(
                   $('<tr>').append(
                     $('<td>').text(urlPagina)
@@ -152,7 +158,7 @@
                     $('<td>').text(nombreCampo)
                   ).append(
                     $('<td>').append(
-                      $('<textarea>').text(valorTest)
+                      $('<pre>').text(textoValorTest)
                     )
                   ).append(
                     $('<td>').text(resultadoTest.esperado)
