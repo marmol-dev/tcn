@@ -60,10 +60,16 @@ Ejemplo:
   "hobbies": {
     "futbol,,baloncesto": true,
     "futbol": false,
+    "": false,
+    "futbol,,baloncesto,,tenis,,ciclismo": false
+  },
+  "genero": {
+    "masculino": true,
     "": false
   }
 }
 ```
+**Varios campos:**
 El campo (conjunto de campos reales) "contrasena1&&contrasena2" indica al framework que se quiere realizar una validación de varios campos (dos en este caso) introduciendo los valores:
 
 - "valor1" en "contrasena1" y "valor2" en "contrasena2".
@@ -76,6 +82,16 @@ El resultado ESPERADO (true o false) es el resultado que se espera al realizar u
 3. Se introduce "valor2" en "contrasena2".
 4. Se comprueba si es válido el campo "contrasena2".
 5. Se comprueba el resultado obtenido de "contrasena1&&contrasena2" haciendo el AND con los resultados obtenidos del paso 2 y 4.
+
+**Checkbox:**
+El campo hobbies es del tipo "checkbox" por lo que se permite introducir varios valores. La sintaxis para introducir valores es:
+
+- valor1,,valor2,,...,,valorN
+
+Si no se quiere seleccionar ningún valor se pone como valor una cadena vacía.
+
+**Radio:**
+Para validar un campo del tipo "radio" solo se necesita introducir como valor uno de los valores del radio. (Debe existir)
 
 #### Para una página
 ```javascript
