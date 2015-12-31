@@ -8,69 +8,23 @@
 
 <body>
   <form name="crear_usuario" action="#" method="post">
-    <input type="text" id="campo_dni" name="dni" value="" data-validar-dni>
+    <input type="text" name="dni" value="" data-validar-dni>
     <input type="text" name="nombre" required minlength="2" maxlength="25" pattern="^[a-z A-Z]{2,25}$" value="">
     <input type="text" name="apellidos" required minlength="5" maxlength="50" pattern="^[a-z A-Z]{5,50}$" value="">
     <input type="email" name="email" value="" required>
     <input type="password" id="campo_contrasena1" minlength="4" maxlength="100" pattern="^.{4,}$" required name="contrasena1" value="">
     <input type="password" id="campo_contrasena2" name="contrasena2" value="" data-validar-igual="#campo_contrasena1">
+    <div>
+      <label for="hobbies" data-validar-checkbox data-validar-checkbox-min="2" data-validar-checkbox-max="3">Introduce dos hobbies</label>
+      <input type="checkbox" name="hobbies" value="futbol">
+      <input type="checkbox" name="hobbies" value="baloncesto">
+      <input type="checkbox" name="hobbies" value="tenis">
+      <input type="checkbox" name="hobbies" value="ciclismo">
+    </div>
     <button type="submit">Enviar</button>
   </form>
-  <script type="text/javascript">
-    ((function(exportar) {
-
-      //Herramientas
-      function esNif(dni) {
-        var numero, letr, letra, expresion_regular_dni = /^\d{8}[a-zA-Z]$/;
-        if (expresion_regular_dni.test(dni) == true) {
-          numero = dni.substr(0, dni.length - 1);
-          letr = dni.substr(dni.length - 1, 1);
-          numero = numero % 23;
-          letra = 'TRWAGMYFPDXBNJZSQVHLCKET';
-          letra = letra.substring(numero, numero + 1);
-          return letra === letr.toUpperCase();
-        } else {
-          return false;
-        }
-      }
-
-
-      var validarDNI = function(campo){
-        console.log(campo);
-        function _validar() {
-          var todoCorrecto = esNif(this.value);
-          this.setCustomValidity(todoCorrecto ? '' : 'DNI incorrecto');
-        }
-        campo.addEventListener('input', _validar);
-        _validar.call(campo, arguments);
-      }
-
-      var validarIgual = function(campo, selector){
-        function _validar(){
-          var campo2 = document.querySelector(selector);
-          var todoCorrecto = campo2.checkValidity() && campo2.value === this.value;
-          this.setCustomValidity(todoCorrecto ? '' : 'Las contraseñas no coinciden');
-        }
-
-        campo.addEventListener('input', _validar);
-        _validar.call(campo, arguments);
-      }
-
-      //Le decimos al documento que cuando esté listo invoque nuestras funciones personalizadas
-      document.addEventListener('DOMContentLoaded', function(){
-        var dnis = document.querySelectorAll('input[data-validar-dni]');
-        for (var i = dnis.length - 1; i >= 0; i--){
-          validarDNI(dnis[i]);
-        }
-
-        var iguales = document.querySelectorAll('input[data-validar-igual]');
-        for (var i = iguales.length - 1; i >= 0; i--){
-          validarIgual(iguales[i], iguales[i].dataset.validarIgual);
-        }
-      });
-
-    })(window, document));
-  </script>
+  <script src="../vendor/jquery.min.js" charset="utf-8"></script>
+  <script src="validacion_formularios.directiva.js" charset="utf-8"></script>
 </body>
 
 </html>

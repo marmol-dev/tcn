@@ -76,22 +76,61 @@
   }
 
   function esCampoValido($campo){
-    var campo = $campo.get(0);
-    //checkValidity returns a boolean
-    if (campo.checkValidity()){
-      return true;
+    var campo;
+    if ($campo.is('input:checkbox')){
+      var resultados = [];
+      $campo.each(function(i){
+        resultados.push(!!this.checkValidity());
+      });
+      return andLogico(resultados);
     } else {
-      return false;
+      campo = $campo.get(0);
+      return !!campo.checkValidity();
+    }
+  }
+
+  function simularEventosInput(campo){
+    var eventosSimulacion = ['input', 'change', 'click', 'keyup', 'propertychange'];
+    for (var i = 0; i < eventosSimulacion.length; i++){
+      fireEvent(campo, eventosSimulacion[i]);
     }
   }
 
   function introducirYComprobar($campo, valor){
-    $campo.val(valor);
+    if ($campo.is('input:checkbox')){
+      var valores = valor.split(',,'),
+        $campo_checkbox;
 
-    //Simulamos que el usuario introduce los valores
-    ['input', 'change', 'click', 'keyup', 'propertychange'].forEach(function(nombreEvento){
-      fireEvent($campo.get(0), nombreEvento);
-    });
+      if (valores > $campo.length){
+        throw new Error('Se han insertado demasiados valores para el checkbox "' + $campo.attr('name') + '"');
+      }
+
+      //Deseleccionamos todos los checkbox
+      $campo.each(function(){
+        $campo_checkbox = $(this);
+        if ($campo_checkbox.is(':checked')){
+          $campo_checkbox.get(0).click();
+        }
+      });
+
+      //Comprobamos si el valor es vacío para no seleccionar ningún checkbox
+      if ($.trim(valor).length > 0){
+        //Seleccionamos los checkbox cuyos valores están en el conjunto de valores
+        for (var i = 0; i < valores.length; i++){
+          $campo_checkbox = $campo.filter('[value="'+ valores[i] +'"]');
+          if ($campo_checkbox.length === 0){
+            throw new Error('No se ha encontrado el checkbox con nombre "' + $campo.attr('name') + '" y valor "' + valores[i] + '"');
+          }
+          console.log('1. Before 2', $campo_checkbox);
+          $campo_checkbox.get(0).click();
+          console.log('2. End 2');
+        }
+      }
+
+    } else {
+      $campo.val(valor);
+      simularEventosInput($campo.get(0));
+    }
 
     return esCampoValido($campo);
   }

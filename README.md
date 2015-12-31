@@ -56,6 +56,11 @@ Ejemplo:
   "contrasena1&&contrasena2" : {
     "valor1&&valor2" : false,
     "mismo_valor&&mismo_valor" : true
+  },
+  "hobbies": {
+    "futbol,,baloncesto": true,
+    "futbol": false,
+    "": false
   }
 }
 ```

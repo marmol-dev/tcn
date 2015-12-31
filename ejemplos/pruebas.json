@@ -33,6 +33,12 @@
       "contrasena1&&contrasena2":{
         "abcd1234&&abcd123": false,
         "abcd1234&&abcd1234": true
+      },
+      "hobbies": {
+        "futbol,,baloncesto": true,
+        "futbol": false,
+        "": false,
+        "futbol,,baloncesto,,tenis,,ciclismo": false
       }
     }
   }

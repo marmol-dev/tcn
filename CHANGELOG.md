@@ -1,5 +1,8 @@
 # Versiones
 ## v0.5
+- Permitida validación de checkboxes
+
+## v0.4.1
 - Mejorada la presentación de valores de test muy grandes
 
 ## v0.4
