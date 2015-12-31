@@ -39,6 +39,10 @@
         "futbol": false,
         "": false,
         "futbol,,baloncesto,,tenis,,ciclismo": false
+      },
+      "genero": {
+        "masculino": true,
+        "": false
       }
     }
   }

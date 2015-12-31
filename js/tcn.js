@@ -77,7 +77,7 @@
 
   function esCampoValido($campo){
     var campo;
-    if ($campo.is('input:checkbox')){
+    if ($campo.is('input:checkbox') || $campo.is('input:radio')){
       var resultados = [];
       $campo.each(function(i){
         resultados.push(!!this.checkValidity());
@@ -97,36 +97,53 @@
   }
 
   function introducirYComprobar($campo, valor){
-    if ($campo.is('input:checkbox')){
-      var valores = valor.split(',,'),
-        $campo_checkbox;
+    if ($campo.is('input:checkbox') || $campo.is('input:radio')){
+      var $campo_hijo;
 
-      if (valores > $campo.length){
-        throw new Error('Se han insertado demasiados valores para el checkbox "' + $campo.attr('name') + '"');
-      }
-
-      //Deseleccionamos todos los checkbox
-      $campo.each(function(){
-        $campo_checkbox = $(this);
-        if ($campo_checkbox.is(':checked')){
-          $campo_checkbox.get(0).click();
-        }
-      });
-
-      //Comprobamos si el valor es vacío para no seleccionar ningún checkbox
-      if ($.trim(valor).length > 0){
-        //Seleccionamos los checkbox cuyos valores están en el conjunto de valores
-        for (var i = 0; i < valores.length; i++){
-          $campo_checkbox = $campo.filter('[value="'+ valores[i] +'"]');
-          if ($campo_checkbox.length === 0){
-            throw new Error('No se ha encontrado el checkbox con nombre "' + $campo.attr('name') + '" y valor "' + valores[i] + '"');
+      if ($campo.is('input:checkbox')){
+        //Deseleccionamos todos los checkboxes
+        $campo.each(function(){
+          $campo_hijo = $(this);
+          if ($campo_hijo.is(':checked')){
+            $campo_hijo.get(0).click();
           }
-          console.log('1. Before 2', $campo_checkbox);
-          $campo_checkbox.get(0).click();
-          console.log('2. End 2');
+        });
+
+        var valores = valor.split(',,');
+        if (valores > $campo.length){
+          throw new Error('Se han insertado demasiados valores para el checkbox "' + $campo.attr('name') + '"');
+        }
+
+        //Comprobamos si el valor es vacío para no seleccionar ningún checkbox
+        if ($.trim(valor).length > 0){
+          //Seleccionamos los checkbox cuyos valores están en el conjunto de valores
+          for (var i = 0; i < valores.length; i++){
+            $campo_hijo = $campo.filter('[value="'+ valores[i] +'"]');
+            if ($campo_hijo.length === 0){
+              throw new Error('No se ha encontrado el checkbox con nombre "' + $campo.attr('name') + '" y valor "' + valores[i] + '"');
+            }
+            $campo_hijo.get(0).click();
+          }
+        }
+      } else {
+        //Deseleccionamos todos los radios
+        $campo.each(function(){
+          $campo_hijo = $(this);
+          $campo_hijo.prop('checked', false);
+        });
+
+        //Si se ha especificado un valor
+        if ($.trim(valor).length > 0){
+          //Buscamos el radio concreto y lo seleccionamos
+          $campo_hijo = $campo.filter('[value="' + valor + '"]');
+
+          if ($campo_hijo.length === 0){
+            throw new Error('No se ha encontrado el radio con nombre "' + $campo.attr('name') + '" y valor "' + valor + '"');
+          }
+
+          $campo_hijo.get(0).click();
         }
       }
-
     } else {
       $campo.val(valor);
       simularEventosInput($campo.get(0));
