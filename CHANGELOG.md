@@ -1,4 +1,8 @@
 # Versiones
+## v0.6
+- Validación de "maxlength" en inputs y textarea.
+- Mejoras interfaz de la página de tests
+
 ## v0.5
 - Permitida validación de checkboxes y radios
 
